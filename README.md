@@ -10,4 +10,8 @@ To run UI tests here will need install dependencies from both npm and bower.
 
 ## Test plugin on Gerrit
 
-1. Build the bundle locally with: `bazel build :zuul_summary_status`
+1. Clone gerrit `git clone https://gerrit.googlesource.com/gerrit`
+1. Clone plugin to `plugins/zuul-summary-status` `cd plugins; git clone https://github.com/ianw/gerrit-zuul-summary-status zuul-summary-status`
+1. Run build `cd ..; bazel build plugins/zuul-summary-status:zuul_summary_status`
+1. Copy resulting plugin `bazel-bin/plugins/zuul-summary-status/zuul-summary-status-bundle.js` to Gerrit plugins directory
+ 
