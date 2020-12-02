@@ -1,0 +1,22 @@
+{
+    "name": "zuul-summary-status",
+    "browser": true,
+    "scripts": {
+        "test": "polymer serve",
+        "eslint": "../../node_modules/eslint/bin/eslint.js --ext .html,.js ./gr-editor/",
+        "eslintfix": "npm run eslint -- --fix",
+        "wct-test": "npm i && npx bower i && npx polymer test -l chrome"
+    },
+    "devDependencies": {
+        "bower": "^1.8.8",
+        "es6-promise": "^3.3.1",
+        "eslint": "^6.6.0",
+        "eslint-config-google": "^0.13.0",
+        "eslint-plugin-html": "^6.0.0",
+        "eslint-plugin-import": "^2.20.1",
+        "eslint-plugin-jsdoc": "^19.2.0",
+        "polymer-cli": "^1.9.11",
+    },
+    "license": "Apache-2.0",
+    "private": true
+}
