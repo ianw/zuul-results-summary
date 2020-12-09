@@ -1,5 +1,5 @@
 {
-    "name": "zuul-summary-status",
+    "name": "zuul-results-summary",
     "browser": true,
     "scripts": {
         "test": "polymer serve",

@@ -65,6 +65,10 @@ class ZuulSummaryStatusTab extends Polymer.Element {
     .status-FAILURE {
       color: red;
     }
+
+    .status-NODE_FAILURE {
+      color: orange;
+    }
   </style>
 
   <template is="dom-repeat" items="[[__table]]">
@@ -127,6 +131,7 @@ class ZuulSummaryStatusTab extends Polymer.Element {
 
     ready() {
         super.ready();
+
         /*
          * change-view-tab-content gets passed ChangeInfo object [1],
          * registered in the property "change".  We walk the list of
@@ -158,19 +163,19 @@ class ZuulSummaryStatusTab extends Polymer.Element {
                 return;
             }
 
-            let date = new Date(message.date);
-            let revision = message._revision_number;
-            let sp = this._get_status_and_pipeline(message);
+            const date = new Date(message.date);
+            const revision = message._revision_number;
+            const sp = this._get_status_and_pipeline(message);
             if (!sp) {
                 // This shouldn't happen as we've validated it is a Zuul message.
                 return;
             }
-            let status = sp[0];
-            let pipeline = sp[1];
+            const status = sp[0];
+            const pipeline = sp[1];
 
             // We only want the latest entry for each CI system in
             // each pipeline
-            let existing = this.__table.findIndex(entry =>
+            const existing = this.__table.findIndex(entry =>
                 (entry.author_id === message.author._account_id) &&
                     (entry.pipeline === pipeline));
 
@@ -188,16 +193,16 @@ class ZuulSummaryStatusTab extends Polymer.Element {
              *   - openstack-tox-py35 http://... : SUCCESS in 2m 45
              */
             let results = [];
-            let lines = message.message.split("\n");
-            let resultRe = /^- (?<job>[^ ]+) (?<link>[^ ]+) : (?<result>[^ ]+) in (?<time>.*)/
+            const lines = message.message.split("\n");
+            const resultRe = /^- (?<job>[^ ]+) (?<link>[^ ]+) : (?<result>[^ ]+) in (?<time>.*)/
             lines.forEach((line) => {
-                let result = resultRe.exec(line);
+                const result = resultRe.exec(line);
                 if (result) {
                     results.push(result.groups);
                 }
             });
 
-            let table = {
+            const table = {
                 'author_name': message.author.name,
                 'author_id': message.author._account_id,
                 'revision': revision,
@@ -251,6 +256,8 @@ customElements.define('zuul-summary-status-tab-header',
  */
 
 Gerrit.install(plugin => {
+    'use strict';
+    
     plugin.registerDynamicCustomComponent(
         'change-view-tab-header',
         'zuul-summary-status-tab-header'
