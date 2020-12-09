@@ -1,5 +1,6 @@
 load("@npm//@bazel/rollup:index.bzl", "rollup_bundle")
 load("//tools/bzl:js.bzl", "bundle_assets", "polygerrit_plugin")
+load("//tools/js:eslint.bzl", "eslint")
 
 polygerrit_plugin(
     name = "zuul_results_summary",
@@ -17,5 +18,26 @@ rollup_bundle(
     sourcemap = "hidden",
     deps = [
       "@tools_npm//rollup-plugin-node-resolve",
+    ],
+)
+
+# Define the eslinter for the plugin
+# The eslint macro creates 2 rules: lint_test and lint_bin
+eslint(
+    name = "lint",
+    srcs = glob([
+        "zuul-results-summary/**/*.js",
+    ]),
+    config = ".eslintrc.json",
+    data = [],
+    extensions = [
+        ".js",
+    ],
+    ignore = ".eslintignore",
+    plugins = [
+        "@npm//eslint-config-google",
+        "@npm//eslint-plugin-html",
+        "@npm//eslint-plugin-import",
+        "@npm//eslint-plugin-jsdoc",
     ],
 )
