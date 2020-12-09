@@ -41,13 +41,21 @@ class ZuulSummaryStatusTab extends Polymer.Element {
     }
 
     th {
-      background-color: #f7ffff;
+      background-color: var(--background-color-primary, #f7ffff);
       font-weight: normal;
-      color: rgb(33, 33, 33);
+      color: var(--primary-text-color, rgb(33, 33, 33));
+    }
+
+    a:link {
+      color: var(--link-color);
     }
 
     tr:nth-child(even) {
-     background-color: #f2f2f2;
+     background-color: var(--background-color-secondary, #f2f2f2);
+    }
+
+    tr:nth-child(odd) {
+     background-color: var(--background-color-tertiary, #f7ffff);
     }
 
     .status-SUCCESS {
