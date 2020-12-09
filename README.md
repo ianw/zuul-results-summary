@@ -2,6 +2,12 @@
 
 Polygerrit plugin to show a summary of Zuul results in a change tab
 
+Results are show in reverse chronological order, additionally sorted
+by CI userid's in ZUUL_PRIORITY (earlier entry in the list means
+sorted first in the output table).  i.e. if you consider one of your
+CI reporters to be the main one, you should place it first in this
+list.
+
 ## UI tests
 
 To run UI tests here will need install dependencies from both npm and bower.

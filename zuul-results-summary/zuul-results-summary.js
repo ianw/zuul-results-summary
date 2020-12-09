@@ -12,6 +12,8 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
+
+// TODO(ianw) : find some way to make this configurable
 const ZUUL_PRIORITY = [22348];
 
 /*
@@ -106,15 +108,13 @@ class ZuulSummaryStatusTab extends Polymer.Element {
   }
 
   _get_status_and_pipeline(message) {
-    /* Look for the full Zuul-3ish build status message, e.g.:
-         *   Build succeeded (check pipeline).
-         */
+    // Look for the full Zuul-3ish build status message, e.g.:
+    //    Build succeeded (check pipeline).
     const statusRe = /^Build (?<status>\w+) \((?<pipeline>[\w]+) pipeline\)\./gm;
     let statusMatch = statusRe.exec(message.message);
     if (!statusMatch) {
-      /* Match non-pipeline CI comments, e.g.:
-             *   Build succeeded.
-             */
+      // Match non-pipeline CI comments, e.g.:
+      //   Build succeeded.
       const statusRe = /^Build (?<status>\w+)\./gm;
       statusMatch = statusRe.exec(message.message);
     }
@@ -254,7 +254,6 @@ customElements.define('zuul-summary-status-tab-header',
 /*
  * Install plugin
  */
-
 Gerrit.install(plugin => {
   'use strict';
 
