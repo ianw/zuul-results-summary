@@ -12,6 +12,8 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
+let ZUUL_PRIORITY = [ 22348 ];
+
 /*
  * Tab contents
  */
@@ -35,7 +37,7 @@ class ZuulSummaryStatusTab extends Polymer.Element {
 
     th, td {
       text-align: left;
-      padding: 10px;
+      padding: 2px;
     }
 
     th {
@@ -58,11 +60,15 @@ class ZuulSummaryStatusTab extends Polymer.Element {
   </style>
 
   <template is="dom-repeat" items="[[__table]]">
+   <div style="padding-left:5px">
    <table>
     <tr>
-     <th><b>[[item.author_name]]</b> on revision <b>[[item.revision]]</b> in pipeline <b>[[item.pipeline]]</b></th>
+     <th>
+      <template is="dom-if" if="{{item.succeeded}}"><span style="color:green"><iron-icon icon="gr-icons:check"></iron-icon></span></template>
+      <template is="dom-if" if="{{!item.succeeded}}"><span style="color:red"><iron-icon icon="gr-icons:close"></iron-icon></span></template>
+      <b>[[item.author_name]]</b> on revision <b>[[item.revision]]</b> in pipeline <b>[[item.pipeline]]</b></th>
      <th><template is="dom-if" if="{{item.rechecks}}">[[item.rechecks]] rechecks</template></th>
-     <th><b>[[item.date]]</b></th>
+     <th><b>[[item.date_string]]</b></th>
     </tr>
     <template is="dom-repeat" items="[[item.results]]" as="job">
      <tr>
@@ -72,6 +78,7 @@ class ZuulSummaryStatusTab extends Polymer.Element {
      </tr>
     </template>
    </table>
+   </div>
   </template>`;
     }
 
@@ -187,8 +194,10 @@ class ZuulSummaryStatusTab extends Polymer.Element {
                 'author_id': message.author._account_id,
                 'revision': revision,
                 'rechecks': rechecks,
-                'date': date.toLocaleString(),
+                'date': date,
+                'date_string': date.toLocaleString(),
                 'status': status,
+                'succeeded': status === 'succeeded' ? true : false,
                 'pipeline': pipeline,
                 'results': results
             }
@@ -198,8 +207,17 @@ class ZuulSummaryStatusTab extends Polymer.Element {
             } else {
                 this.__table[existing] = table;
             }
-            console.debug("Zuul Summary table now:");
-            console.debug(this.__table);
+
+            // Sort first by listed priority, then by date
+            this.__table.sort((a, b) => {
+                // >>> 0 is just a trick to convert -1 to uint max
+                // of 2^32-1
+                let p_a = ZUUL_PRIORITY.indexOf(a.author_id) >>> 0;
+                let p_b = ZUUL_PRIORITY.indexOf(b.author_id) >>> 0;
+                let priority = p_a - p_b;
+                let date = b.date - a.date;
+                return priority || date;
+            });
         });
     }
 }
