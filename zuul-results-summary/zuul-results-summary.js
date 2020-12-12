@@ -73,7 +73,7 @@ class ZuulSummaryStatusTab extends Polymer.Element {
   </style>
 
   <template is="dom-repeat" items="[[__table]]">
-   <div style="padding-left:5px">
+   <div style="padding-left:5px; padding-bottom:2px;">
    <table>
     <tr>
      <th>
