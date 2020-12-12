@@ -85,7 +85,8 @@ class ZuulSummaryStatusTab extends Polymer.Element {
     </tr>
     <template is="dom-repeat" items="[[item.results]]" as="job">
      <tr>
-      <td><a href="[[job.link]]">[[job.job]]</a></td>
+      <template is="dom-if" if="{{job.link}}"><td><a href="{{job.link}}">[[job.job]]</a></td></template>
+      <template is="dom-if" if="{{!job.link}}"><td><a>[[job.job]]</a></td></template>
       <td><span class$="status-[[job.result]]">[[job.result]]</span></td>
       <td>[[job.time]]</td>
      </tr>
@@ -195,7 +196,7 @@ class ZuulSummaryStatusTab extends Polymer.Element {
       //   - openstack-tox-py35 http://... : SUCCESS in 2m 45
       const results = [];
       const lines = message.message.split('\n');
-      const resultRe = /^- (?<job>[^ ]+) (?<link>[^ ]+) : (?<result>[^ ]+) in (?<time>.*)/;
+      const resultRe = /^- (?<job>[^ ]+) (?:(?<link>https?:\/\/[^ ]+)|[^ ]+) : (?<result>[^ ]+) in (?<time>.*)/;
       lines.forEach(line => {
         const result = resultRe.exec(line);
         if (result) {
