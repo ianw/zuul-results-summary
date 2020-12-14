@@ -73,19 +73,20 @@ class ZuulSummaryStatusTab extends Polymer.Element {
   </style>
 
   <template is="dom-repeat" items="[[__table]]">
-   <div style="padding-left:5px">
+   <div style="padding-left:5px; padding-bottom:2px;">
    <table>
     <tr>
      <th>
       <template is="dom-if" if="{{item.succeeded}}"><span style="color:green"><iron-icon icon="gr-icons:check"></iron-icon></span></template>
       <template is="dom-if" if="{{!item.succeeded}}"><span style="color:red"><iron-icon icon="gr-icons:close"></iron-icon></span></template>
-      <b>[[item.author_name]]</b> on revision <b>[[item.revision]]</b> in pipeline <b>[[item.pipeline]]</b></th>
+      <b>[[item.author_name]]</b> on Patchset <b>[[item.revision]]</b> in pipeline <b>[[item.pipeline]]</b></th>
      <th><template is="dom-if" if="{{item.rechecks}}">[[item.rechecks]] rechecks</template></th>
      <th><b>[[item.date_string]]</b></th>
     </tr>
     <template is="dom-repeat" items="[[item.results]]" as="job">
      <tr>
-      <td><a href="[[job.link]]">[[job.job]]</a></td>
+      <template is="dom-if" if="{{job.link}}"><td><a href="{{job.link}}">[[job.job]]</a></td></template>
+      <template is="dom-if" if="{{!job.link}}"><td><a>[[job.job]]</a></td></template>
       <td><span class$="status-[[job.result]]">[[job.result]]</span></td>
       <td>[[job.time]]</td>
      </tr>
@@ -195,7 +196,7 @@ class ZuulSummaryStatusTab extends Polymer.Element {
       //   - openstack-tox-py35 http://... : SUCCESS in 2m 45
       const results = [];
       const lines = message.message.split('\n');
-      const resultRe = /^- (?<job>[^ ]+) (?<link>[^ ]+) : (?<result>[^ ]+) in (?<time>.*)/;
+      const resultRe = /^- (?<job>[^ ]+) (?:(?<link>https?:\/\/[^ ]+)|[^ ]+) : (?<result>[^ ]+) in (?<time>.*)/;
       lines.forEach(line => {
         const result = resultRe.exec(line);
         if (result) {
